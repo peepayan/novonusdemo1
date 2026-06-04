@@ -1,1 +1,24 @@
-# pinned after install
+# Install with:
+#   pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu128
+# RTX 5060 = Blackwell sm_120. Needs torch built against CUDA 12.8+.
+
+# torch (Blackwell-capable build)
+torch==2.11.0+cu128
+torchvision==0.26.0+cu128
+
+# physics
+mujoco==3.9.0
+warp-lang==1.14.0
+mujoco-warp==3.9.0.1
+
+# vision model
+transformers==5.10.2
+huggingface-hub==1.17.0
+safetensors==0.7.0
+tokenizers==0.22.2
+Pillow==12.2.0
+
+# scientific stack
+numpy==2.4.4
+scipy==1.17.1
+matplotlib==3.10.9
