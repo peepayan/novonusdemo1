@@ -1,0 +1,40 @@
+# venv
+.venv/
+venv/
+env/
+
+# python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# data + artifacts (keep folders via .gitkeep)
+data/*
+!data/.gitkeep
+outputs/*
+!outputs/.gitkeep
+
+# model checkpoints
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+
+# os / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# env files
+.env
+.env.local
