@@ -42,16 +42,15 @@ def jaw_close_ctrl_for_force(grip_force_N: float) -> float:
     """Map a desired Newtonian grip force to a jaw closure command.
 
     The gripper jaws are position-controlled with kp = 180 N/m and a
-    forcerange that caps the actuator output. A jaw target deeper than the
-    grape's radius produces a positive position error which the actuator
-    converts into an inward force; we choose the commanded position so the
-    saturated actuator force equals the requested grip force.
-
-    With kp = 180, an extra position error of dx (m) yields kp * dx Newtons
-    of force on the jaw. So dx = grip_force_N / kp.
+    forcerange that caps the actuator output. The base closure is sized to
+    bring each jaw to the grape's surface (jaw at ±0.030, grape radius
+    0.020 -> each jaw must travel 0.010 m inward to just touch). Any
+    requested grip force becomes additional commanded over-travel; the
+    actuator force-range cap prevents that over-travel from ever exceeding
+    the grape's crush threshold.
     """
     kp = 180.0
-    base_close = 0.022   # close until just touching a 2 cm grape
+    base_close = 0.010    # each jaw travels 1 cm to touch a 2 cm-radius grape
     extra = max(0.0, float(grip_force_N)) / kp
     cmd = base_close + extra
     return float(min(0.045, cmd))
