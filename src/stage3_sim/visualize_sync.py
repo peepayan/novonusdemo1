@@ -241,7 +241,7 @@ def render_synced_demo(out_mp4: Path,
         # step the controller and physics n_phys_per_tick times
         for _ in range(n_phys_per_tick):
             cs = controller.step(tick.phase_name, tick.phase_force_N,
-                                 pc.SIM_TIMESTEP_S)
+                                 pc.SIM_TIMESTEP_S, data=backend.data)
             backend.set_ctrl(cs.ctrl)
             backend.step()
         # measured contact force (post-physics)

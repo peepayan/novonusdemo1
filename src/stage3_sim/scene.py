@@ -250,6 +250,17 @@ def build_scene_xml(ur5e_xml: Path = pc.UR5E_XML,
          forcerange=(-pc.GRAPE_CRUSH_THRESHOLD_N,
                      pc.GRAPE_CRUSH_THRESHOLD_N))
 
+    # equality constraint that "welds" the grape to the gripper TCP. Disabled
+    # by default; the controller activates it when the jaws are closed on
+    # the grape so the pick-and-place is robust to small contact-friction
+    # variations during the lift, and deactivates it once the arm is over
+    # the target zone so the grape falls under gravity onto the zone.
+    eq = root.find("equality")
+    if eq is None:
+        eq = ET.SubElement(root, "equality")
+    _sub(eq, "weld", name="grape_grip", body1="wrist_3_link", body2="grape",
+         relpose="0 0.11 0 1 0 0 0", active="false")
+
     # update keyframe so it includes neutral arm + open jaws
     kf = root.find("keyframe")
     if kf is None:

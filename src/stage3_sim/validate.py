@@ -72,7 +72,7 @@ def _cycle_check(backend: WarpBackend, device: str = "cuda:0",
     for tick in streamer.iter():
         for _ in range(phys_per_tick):
             cs = controller.step(tick.phase_name, tick.phase_force_N,
-                                 pc.SIM_TIMESTEP_S)
+                                 pc.SIM_TIMESTEP_S, data=backend.data)
             backend.set_ctrl(cs.ctrl)
             backend.step()
         phase_seen[tick.phase_name] += 1
