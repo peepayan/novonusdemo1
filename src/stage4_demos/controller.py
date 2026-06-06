@@ -305,15 +305,27 @@ class ScriptedController:
                     "REST_PRE", "REST_POST") else "REST"
                 if phase == "GRIPPING":
                     gripping_elapsed += frame_dt
-                    jc = jaw_close_ctrl_for_force(self.params.grip_force_N)
-                    ja = 1.0 - 0.5 ** (frame_dt / max(
-                        self.params.close_speed_halflife, 1e-3))
-                    jaw_l += ja * (jc - jaw_l)
-                    jaw_r += ja * (jc - jaw_r)
-                    if (not weld_active) and gripping_elapsed > 0.40:
+                    # Hold jaws open while the gripper descends, then close
+                    # them around the grape near the bottom of the stroke.
+                    # Without this delay the jaws collide with the grape from
+                    # the side mid-descent and bat it away.
+                    if s < 0.80:
+                        jc_target = 0.0
+                        ja = 1.0 - 0.5 ** (frame_dt / 0.18)
+                    else:
+                        jc_target = jaw_close_ctrl_for_force(
+                            self.params.grip_force_N)
+                        ja = 1.0 - 0.5 ** (frame_dt / max(
+                            self.params.close_speed_halflife, 1e-3))
+                    jaw_l += ja * (jc_target - jaw_l)
+                    jaw_r += ja * (jc_target - jaw_r)
+                    # Only weld once the gripper has reached the grape AND
+                    # the jaws have visibly closed around it.
+                    if (not weld_active) and s >= 0.95:
                         self._set_grip_weld(True)
                         weld_active = True
-                    applied_force = self.params.grip_force_N
+                    applied_force = (self.params.grip_force_N
+                                     if s >= 0.80 else 0.0)
                 elif phase == "STABILIZING":
                     jc = jaw_close_ctrl_for_force(self.params.grip_force_N)
                     ja = 1.0 - 0.5 ** (frame_dt / 0.10)
