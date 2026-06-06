@@ -229,6 +229,12 @@ def build_scene_xml(ur5e_xml: Path = pc.UR5E_XML,
          friction=(1.0, 0.05, 0.001),
          contype=1, conaffinity=1, group=1)
 
+    # TCP site at the midpoint between the open jaws — used by the IK
+    # routine to target the grape position and (later) by Stage 7 as a
+    # readable end-effector pose.
+    _sub(wrist3, "site", name="tcp", pos=(0.0, 0.110, 0.0),
+         size=(0.003,), rgba=(1.0, 0.2, 0.2, 0.6), group=4)
+
     # actuators — add jaw position actuators with low stiffness so the
     # commanded inward position translates into a modest contact force (a
     # gentle pinch, scaled by the LSTM force-head output)

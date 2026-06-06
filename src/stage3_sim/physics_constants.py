@@ -105,25 +105,29 @@ import math as _m
 ARM_HOME_QPOS: tuple[float, ...] = (
     0.0, -_m.pi / 2, _m.pi / 2, -_m.pi / 2, -_m.pi / 2, 0.0,
 )
-# A hover pose over the grape: shoulder rotates toward +x, lift down, elbow up.
+# Waypoints solved by `ik.solve_ik` to target the gripper TCP at the
+# specified world-frame offsets above the grape:
+#   HOVER     18 cm above the grape
+#   PREGRIP    8 cm above the grape
+#   GRIP        flush with the grape (jaws straddle it)
+#   STABILIZE 12 cm above the grape (lift while held)
+#   RELEASE   10 cm above + 15 cm in +y toward the target zone disc
+# Numbers were extracted from the IK pass and frozen here so the demo
+# is deterministic across runs.
 ARM_HOVER_QPOS: tuple[float, ...] = (
-    0.0, -1.20, 1.60, -1.96, -1.5708, 0.0,
+    -0.2326, -1.2416, 1.8124, -1.8782, -1.6308, 0.0,
 )
-# Pre-grasp: descend further so end-effector is just above the grape.
 ARM_PREGRIP_QPOS: tuple[float, ...] = (
-    0.0, -1.00, 1.80, -2.30, -1.5708, 0.0,
+    -0.2355, -1.0626, 1.8250, -1.8987, -1.6225, 0.0,
 )
-# At grape (contact).
 ARM_GRIP_QPOS: tuple[float, ...] = (
-    0.0, -0.85, 1.95, -2.60, -1.5708, 0.0,
+    -0.2371, -0.9100, 1.8066, -1.9256, -1.6147, 0.0,
 )
-# Lift back up for stabilize.
 ARM_STABILIZE_QPOS: tuple[float, ...] = (
-    0.0, -1.05, 1.70, -2.15, -1.5708, 0.0,
+    -0.2349, -1.1354, 1.8256, -1.8892, -1.6254, 0.0,
 )
-# Move to target zone (rotate shoulder pan slightly +y direction).
 ARM_RELEASE_QPOS: tuple[float, ...] = (
-    0.25, -1.00, 1.80, -2.30, -1.5708, 0.0,
+    0.0269, -1.0711, 1.7835, -1.9130, -1.5658, 0.0,
 )
 
 # ---------------------------------------------------------------------------
