@@ -37,6 +37,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  padding-top: 140px;
 }
 
 /* HEADER ----------------------------------------------------------- */
@@ -46,11 +47,13 @@ body {
   justify-content: space-between;
   padding: 14px 28px;
   border-bottom: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.92);
-  backdrop-filter: blur(8px);
-  position: sticky;
+  background: #000;
+  position: fixed;
   top: 0;
-  z-index: 30;
+  left: 0;
+  right: 0;
+  height: 64px;
+  z-index: 50;
 }
 .brand { display: flex; align-items: center; gap: 12px; }
 .brand-mark {
@@ -71,16 +74,22 @@ body {
 /* STAGE NAV -------------------------------------------------------- */
 .stage-nav {
   display: flex;
+  align-items: center;
   gap: 0;
-  padding: 16px 28px 14px;
+  padding: 16px 28px;
   overflow-x: auto;
   border-bottom: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(8px);
-  position: sticky;
-  top: 65px;
-  z-index: 25;
+  background: #000;
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  height: 76px;
+  z-index: 45;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
 }
+.stage-pill { flex-shrink: 0; }
 .stage-pill {
   display: flex;
   align-items: center;

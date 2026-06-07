@@ -8,7 +8,7 @@
   const stages = [
     { id: "s1", title: "Capture EMG", short: "Capture EMG" },
     { id: "s2", title: "Signal Processing (DSP)", short: "DSP" },
-    { id: "s3", title: "Intent + Force Model", short: "Intent + Force" },
+    { id: "s3", title: "Intent + Force Model", short: "LSTM (Intent + Force)" },
     { id: "s4", title: "Force Validation", short: "Force Validation" },
     { id: "s5", title: "Simulation Scene", short: "Simulation" },
     { id: "s6", title: "Augmentation + Verification", short: "Augmentation" },
@@ -254,10 +254,10 @@
     sc.innerHTML = `
       <div class="stage-header">
         <div class="stage-title-wrap">
-          <span class="stage-eyebrow">Stage 3</span>
+          <span class="stage-eyebrow">Stage 3 — LSTM training</span>
           <div>
-            <h2 class="stage-title">Intent + Force Model</h2>
-            <div class="stage-subtitle">A bidirectional LSTM maps 12-channel EMG envelopes to (a) intent class and (b) an EMG-amplitude force proxy.</div>
+            <h2 class="stage-title">Intent + Force Model <span style="font-size:14px; padding:4px 10px; border:1px solid var(--accent); border-radius:999px; color:var(--accent); margin-left:10px; vertical-align:middle; letter-spacing:1px;">LSTM</span></h2>
+            <div class="stage-subtitle"><strong>This is where the LSTM is trained.</strong> A bidirectional LSTM maps 12-channel EMG envelopes to (a) intent class and (b) an EMG-amplitude force proxy. Architecture: 2-layer BiLSTM (128 hidden) → two heads: 5-way softmax (intent) + 1-d regression (force). Train data: Ninapro DB2 windows; loss: cross-entropy + λ·MSE.</div>
           </div>
         </div>
       </div>
@@ -266,11 +266,11 @@
         <div class="left">
           <div class="action-icon">⌬</div>
           <div>
-            <div style="font-weight:600">Classify Intent + Predict Force</div>
-            <div class="action-desc">Replay training (real loss curve), then show the live label + force gauge and the confusion matrix.</div>
+            <div style="font-weight:600">Train LSTM — Classify Intent + Predict Force</div>
+            <div class="action-desc">Replay the real LSTM training run (loss curve), then show the trained model's live label + force gauge and the confusion matrix.</div>
           </div>
         </div>
-        <button class="btn-primary" data-action="s3">Classify Intent + Predict Force</button>
+        <button class="btn-primary" data-action="s3">Train LSTM</button>
       </div>
 
       <div class="loader-zone"></div>
@@ -278,7 +278,7 @@
       <div class="reveal">
         <div class="grid">
           <div class="card col-8">
-            <h4>Training replay — real loss curve</h4>
+            <h4>LSTM training — real loss curve replay</h4>
             <div class="replay-wrap" id="s3-replay">
               <img src="${s.loss_curve}" alt="LSTM training loss curve" />
               <div class="replay-hud">
@@ -288,7 +288,7 @@
               <div class="replay-mask" id="s3-mask"></div>
               <div class="replay-tag">Replay of real training run</div>
             </div>
-            <div class="caption">Best validation intent accuracy <strong>${s.best_val_intent_acc_pct.toFixed(2)}%</strong> at epoch ${s.best_epoch}. This is a replay of the saved training curve, not live training.</div>
+            <div class="caption"><strong style="color:var(--accent)">LSTM trained here.</strong> Best validation intent accuracy <strong>${s.best_val_intent_acc_pct.toFixed(2)}%</strong> at epoch ${s.best_epoch}. This is a replay of the saved training curve, not live training. Checkpoint saved at <code class="mono" style="color:var(--text-1)">outputs/stage2/lstm_best.pt</code>.</div>
           </div>
           <div class="card col-4">
             <h4>Intent classes</h4>
