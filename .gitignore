@@ -38,3 +38,7 @@ Thumbs.db
 # env files
 .env
 .env.local
+
+
+# stage7: cloned upstream reference, not part of our project history
+src/stage7_diffusion/diffusion_policy_ref/
