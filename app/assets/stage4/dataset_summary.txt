@@ -1,0 +1,63 @@
+Novonus Stage 4 — demo dataset summary
+=======================================================
+demos saved              : 30
+total timesteps          : 12,360
+avg duration             : 14.01 s
+min/max duration         : 14.01 / 14.01 s
+
+per-phase duration (s) [mean ± std, min..max]:
+  REST_PRE      0.50 ± 0.00   (0.50..0.50)
+  REACHING      2.93 ± 0.00   (2.93..2.93)
+  GRIPPING      2.93 ± 0.00   (2.93..2.93)
+  STABILIZING   2.47 ± 0.00   (2.47..2.47)
+  RELEASING     3.93 ± 0.00   (3.93..3.93)
+  REST_POST     0.97 ± 0.00   (0.97..0.97)
+
+applied grip force (N)  : max 3.80  mean 1.46  min 2.22
+measured contact (N)    : max 1.44  median 1.32
+crush threshold (N)     : 6.0
+ALL DEMOS BELOW CRUSH    : True
+safe grip band          : 2.0-4.0 N
+
+grape initial XY (m):
+  x: mean 0.545  std 0.0180   range 0.523..0.578
+  y: mean -0.002  std 0.0137   range -0.027..0.024
+grape final XY error from target (mm):
+  mean 20.4   max 20.8   threshold 30.0
+  all in target zone (<= 30 mm) : True
+
+EMG pairing               : synthetic, phase-aligned
+  source                  : outputs/stage1/*.npy (val reps), Stage 2 LSTM-predicted class per window
+  GRIPPING force gate     : LSTM force head 0.2-0.4
+
+per-demo (filename, T, dur, max_applied_N, max_contact_N, xy_err_mm):
+  demo_000.npz       T= 412  dur=14.01s  applied=3.50  contact=1.43  err= 20.5mm
+  demo_001.npz       T= 412  dur=14.01s  applied=2.48  contact=1.12  err= 20.6mm
+  demo_002.npz       T= 412  dur=14.01s  applied=3.80  contact=1.44  err= 20.6mm
+  demo_003.npz       T= 412  dur=14.01s  applied=3.62  contact=1.38  err= 20.7mm
+  demo_004.npz       T= 412  dur=14.01s  applied=2.33  contact=1.10  err= 19.9mm
+  demo_005.npz       T= 412  dur=14.01s  applied=2.28  contact=1.11  err= 20.1mm
+  demo_006.npz       T= 412  dur=14.01s  applied=3.21  contact=1.32  err= 20.5mm
+  demo_007.npz       T= 412  dur=14.01s  applied=3.00  contact=1.22  err= 19.8mm
+  demo_008.npz       T= 412  dur=14.01s  applied=2.22  contact=1.08  err= 20.1mm
+  demo_009.npz       T= 412  dur=14.01s  applied=3.68  contact=1.40  err= 20.7mm
+  demo_010.npz       T= 412  dur=14.01s  applied=3.41  contact=1.39  err= 20.4mm
+  demo_011.npz       T= 412  dur=14.01s  applied=2.59  contact=1.15  err= 19.8mm
+  demo_012.npz       T= 412  dur=14.01s  applied=3.51  contact=1.35  err= 20.7mm
+  demo_013.npz       T= 412  dur=14.01s  applied=3.52  contact=1.44  err= 20.6mm
+  demo_014.npz       T= 412  dur=14.01s  applied=3.58  contact=1.43  err= 20.6mm
+  demo_015.npz       T= 412  dur=14.01s  applied=3.02  contact=1.22  err= 20.6mm
+  demo_016.npz       T= 412  dur=14.01s  applied=3.58  contact=1.37  err= 20.5mm
+  demo_017.npz       T= 412  dur=14.01s  applied=3.04  contact=1.28  err= 20.8mm
+  demo_018.npz       T= 412  dur=14.01s  applied=3.28  contact=1.33  err= 20.7mm
+  demo_019.npz       T= 412  dur=14.01s  applied=3.36  contact=1.37  err= 20.1mm
+  demo_020.npz       T= 412  dur=14.01s  applied=3.59  contact=1.42  err= 20.2mm
+  demo_021.npz       T= 412  dur=14.01s  applied=3.13  contact=1.32  err= 20.7mm
+  demo_022.npz       T= 412  dur=14.01s  applied=3.25  contact=1.27  err= 20.7mm
+  demo_023.npz       T= 412  dur=14.01s  applied=2.34  contact=1.10  err= 20.1mm
+  demo_024.npz       T= 412  dur=14.01s  applied=2.85  contact=1.25  err= 20.1mm
+  demo_025.npz       T= 412  dur=14.01s  applied=3.76  contact=1.43  err= 20.5mm
+  demo_026.npz       T= 412  dur=14.01s  applied=2.83  contact=1.24  err= 20.3mm
+  demo_027.npz       T= 412  dur=14.01s  applied=3.13  contact=1.25  err= 20.7mm
+  demo_028.npz       T= 412  dur=14.01s  applied=3.40  contact=1.32  err= 20.6mm
+  demo_029.npz       T= 412  dur=14.01s  applied=2.34  contact=1.10  err= 20.1mm

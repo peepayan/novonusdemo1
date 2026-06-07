@@ -1,0 +1,82 @@
+Novonus Stage 2 — E3 dedicated force model accuracy
+============================================================
+
+E3 raw block structure (S1_E3_A1.mat)
+--------------------------------------------------
+  sampling rate    : 2000 Hz (DB2 spec)
+  total samples    : 877,072
+  duration         : 7.31 min
+  emg              : shape=(877072, 12)  dtype=float32
+  acc              : shape=(877072, 36)  dtype=float32
+  force            : shape=(877072, 6)  dtype=float32
+  forcecal         : shape=(2, 6)  dtype=float32
+  restimulus       : shape=(877072,)
+  rerepetition     : shape=(877072,)
+
+  restimulus labels present: [0, 41, 42, 43, 44, 45, 46, 47, 48, 49]
+  reps                     : [0, 1, 2, 3, 4, 5, 6]
+
+  per-channel measured force (calibrated units):
+    ch0: min= -4.101  max=+12.500  mean= +0.431  std=3.463
+    ch1: min= -3.320  max=+15.428  mean= +0.883  std=3.203
+    ch2: min= -6.834  max=+10.741  mean= -0.438  std=3.009
+    ch3: min= -5.175  max=+19.043  mean= +0.619  std=4.988
+    ch4: min= -8.640  max=+20.897  mean= +0.492  std=4.020
+    ch5: min= -0.439  max=+22.656  mean= +2.685  std=4.785
+
+  forcecal (per-channel calibration constants, 2 x 6):
+     -0.500   -0.432   -1.452   -1.500   +0.475   +0.977
+    +13.680  +10.744   +7.036  +12.648  +13.760  +18.966
+
+  -> chose to predict the L2 magnitude across the 6 force channels
+     (overall force effort) as a single scalar regression target,
+     because the channels measure different finger-axis forces and a
+     magnitude summary aligns with the 'one number per timestep'
+     interface used by the rest of the pipeline.
+
+E3 split sizes : train=35,714   test=6,982
+rich features  : 60 dim (enabled)
+force scaling  : lo=1.882  hi=20.944  (calibrated units)
+
+Envelope-only baseline (no rich features):
+  R^2                         : +0.9596
+  Pearson r                   : +0.9798
+  RMSE (normalized [0,1])     : 0.0602
+  RMSE (real force units)     : 1.1473
+  MAE  (normalized)           : 0.0385
+  MAE  (real force units)     : 0.7339
+  MAPE (real units, %)        : 9.77
+  test samples                : 6,982
+
+Rich-feature model (RMS+MAV+WL+VAR+MNF concatenated):
+  R^2                         : +0.9592
+  Pearson r                   : +0.9814
+  RMSE (normalized [0,1])     : 0.0605
+  RMSE (real force units)     : 1.1541
+  MAE  (normalized)           : 0.0373
+  MAE  (real force units)     : 0.7118
+  MAPE (real units, %)        : 8.79
+  test samples                : 6,982
+
+Feature-set comparison (rich minus envelope-only):
+  Delta R^2          : -0.0005
+  Delta RMSE (real)  : +0.0067
+
+Honest interpretation:
+  - The model is trained against REAL measured force (E3 force sensors),
+    not the EMG-amplitude proxy used elsewhere in Stage 2.
+  - Held-out test = repetition 6 of E3 (model never saw it during training).
+  - E3 has no glove modality; the model uses EMG envelope + accelerometer only.
+  - E3 is sustained force-task data from one subject (DB2_s1). Real-world
+    contact-rich performance will differ; this number demonstrates the
+    EMG-to-real-force prediction capability, not field accuracy.
+
+Hyperparameters:
+  max_epochs: 50
+  batch_size: 128
+  lr: 0.001
+  weight_decay: 0.0
+  patience: 10
+  min_batch_size: 32
+  device: cuda:0
+  seed: 0

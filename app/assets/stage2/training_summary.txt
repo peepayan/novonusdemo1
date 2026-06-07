@@ -1,0 +1,35 @@
+Novonus Stage 2 — training summary
+==================================================
+
+best epoch:           14
+best val intent-acc:  94.18%
+best val force-MSE:   0.000353
+epochs run:           24
+final batch size:     128
+
+hyperparameters:
+  max_epochs: 50
+  batch_size: 128
+  lr: 0.001
+  weight_decay: 0.0
+  lambda_force: 1.0
+  patience: 10
+  min_batch_size: 32
+  device: cuda:0
+  seed: 0
+
+windows: train=178,408  val=34,709
+intent-class distribution (train | val):
+  0 REST         train= 103,076 ( 57.8%)   val=  19,835 ( 57.1%)
+  1 REACHING     train=  18,739 ( 10.5%)   val=   3,733 ( 10.8%)
+  2 GRIPPING     train=  13,166 (  7.4%)   val=   2,702 (  7.8%)
+  3 STABILIZING  train=  38,509 ( 21.6%)   val=   7,539 ( 21.7%)
+  4 RELEASING    train=   4,918 (  2.8%)   val=     900 (  2.6%)
+class weights (train, normalized to mean 1): 0.132, 0.724, 1.031, 0.353, 2.760
+
+NOTE: the force-intensity target is an EMG-amplitude proxy,
+computed as the smoothed mean of the 12-channel MVC-normalized
+EMG envelope, NOT a calibrated/measured force. The trained
+force head is therefore a learned readout of muscle effort,
+not a measurement. See force_validation_summary.txt for
+independent E3 correlation analysis vs measured force.

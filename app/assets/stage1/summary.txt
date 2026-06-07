@@ -1,0 +1,11 @@
+subject:           DB2_s1
+sampling rate:     2000 Hz (hard-pinned, DB2 spec)
+total samples:     4,361,620
+duration:          36.35 min (2180.8 s)
+emg shape:         (4361620, 12)  dtype=float32
+acc shape:         (4361620, 36)  dtype=float32
+glove shape:       (4361620, 22)  dtype=float32
+labels (restim):   (4361620,)  classes=40 movements + rest
+labels range:      [0 .. 40]
+repetitions:       unique=[np.int16(0), np.int16(1), np.int16(2), np.int16(3), np.int16(4), np.int16(5), np.int16(6)] (0=rest gap)
+blocks present:    [1, 2]

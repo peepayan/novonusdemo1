@@ -1,0 +1,101 @@
+{
+  "n_baselines": 30,
+  "raw_scenarios_generated": 123,
+  "passing_scenarios": 100,
+  "pass_rate_pct": 81.30081300813008,
+  "rejection_breakdown": {
+    "PATH_DEVIATION": 0,
+    "CONTACT_TIMING": 0,
+    "TASK_FAILURE": 0,
+    "FORCE_OUT_OF_BAND": 0,
+    "FORCE_PROFILE_MISMATCH": 23,
+    "FORCE_OVERSHOOT": 0
+  },
+  "force_stats_passing": {
+    "peak_force_N": {
+      "min": 0.8875925540924072,
+      "max": 2.04453182220459,
+      "mean": 1.371264021396637,
+      "std": 0.26125014132352314
+    },
+    "mean_force_N": {
+      "min": 0.41820481419563293,
+      "max": 0.8421213030815125,
+      "mean": 0.6107023561000824,
+      "std": 0.10185303499134993
+    },
+    "max_overshoot_observed_N": 2.04453182220459,
+    "crush_threshold_N": 6.0,
+    "all_below_crush": true
+  },
+  "parameter_distribution_passing": {
+    "grape_mass_kg": {
+      "min": 0.00401319704756141,
+      "max": 0.005984809104282864,
+      "mean": 0.004973166671807524,
+      "std": 0.0006067462381081594
+    },
+    "grape_jaw_friction": {
+      "min": 0.41261637805231727,
+      "max": 0.8978032796335378,
+      "mean": 0.6551417225749699,
+      "std": 0.13909932267296524
+    },
+    "grape_solref0": {
+      "min": 0.014176475659584431,
+      "max": 0.025966519229470537,
+      "mean": 0.020128598996414396,
+      "std": 0.0037150147354869253
+    },
+    "approach_angle_rad": {
+      "min": -0.1723768052070807,
+      "max": 0.1727587450129424,
+      "mean": -0.003963722207206105,
+      "std": 0.10412975278533332
+    },
+    "table_friction0": {
+      "min": 0.682915166267267,
+      "max": 0.9196785911698506,
+      "mean": 0.8063901391485924,
+      "std": 0.06618262208882753
+    },
+    "light_ambient_scale": {
+      "min": 0.8019597659954303,
+      "max": 1.1933338826213684,
+      "mean": 0.9846938684403537,
+      "std": 0.11942617586357063
+    }
+  },
+  "baseline_coverage": {
+    "n_distinct_baselines_used": 30,
+    "most_productive": [
+      {
+        "baseline_demo_idx": 0,
+        "count": 4
+      },
+      {
+        "baseline_demo_idx": 1,
+        "count": 4
+      },
+      {
+        "baseline_demo_idx": 2,
+        "count": 4
+      }
+    ],
+    "least_productive": [
+      {
+        "baseline_demo_idx": 29,
+        "count": 3
+      },
+      {
+        "baseline_demo_idx": 28,
+        "count": 3
+      },
+      {
+        "baseline_demo_idx": 27,
+        "count": 3
+      }
+    ]
+  },
+  "total_frames_in_validated_dataset": 41200
+}

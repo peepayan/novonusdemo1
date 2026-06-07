@@ -1,0 +1,110 @@
+{
+  "n_trials": 5,
+  "success_count": 0,
+  "crush_violations": 0,
+  "mean_peak_force_N": 0.6320577595431678,
+  "max_peak_force_N": 1.1120668379403775,
+  "crush_threshold_N": 6.0,
+  "trials": [
+    {
+      "trial_idx": 0,
+      "grape_xy": [
+        0.5419056245434662,
+        -0.0097735570943519
+      ],
+      "emg_source_demo_id": "stage4_demo_004",
+      "success": false,
+      "grape_final_xyz": [
+        0.4997149109840393,
+        0.0068349833600223064,
+        0.7695350646972656
+      ],
+      "grape_xy_err_m": 0.15173929929733276,
+      "peak_force_N": 0.768095402893441,
+      "crush_violated": false,
+      "duration_s": 149.82554459571838,
+      "n_frames": 600,
+      "timeout": true
+    },
+    {
+      "trial_idx": 1,
+      "grape_xy": [
+        0.5359149733855982,
+        0.01490481755341971
+      ],
+      "emg_source_demo_id": "stage4_demo_029",
+      "success": false,
+      "grape_final_xyz": [
+        0.5009562373161316,
+        0.011007077060639858,
+        0.7695350646972656
+      ],
+      "grape_xy_err_m": 0.14739175140857697,
+      "peak_force_N": 0.53015474971153,
+      "crush_violated": false,
+      "duration_s": 156.97808122634888,
+      "n_frames": 600,
+      "timeout": true
+    },
+    {
+      "trial_idx": 2,
+      "grape_xy": [
+        0.5545010504152649,
+        -0.01729642003531166
+      ],
+      "emg_source_demo_id": "stage4_demo_021",
+      "success": false,
+      "grape_final_xyz": [
+        0.16994071006774902,
+        0.08770985156297684,
+        0.7695350050926208
+      ],
+      "grape_xy_err_m": 0.38513001799583435,
+      "peak_force_N": 1.1120668379403775,
+      "crush_violated": false,
+      "duration_s": 160.38340258598328,
+      "n_frames": 600,
+      "timeout": true
+    },
+    {
+      "trial_idx": 3,
+      "grape_xy": [
+        0.5625802555840732,
+        0.025619653050907087
+      ],
+      "emg_source_demo_id": "stage4_demo_027",
+      "success": false,
+      "grape_final_xyz": [
+        0.5100250840187073,
+        0.011507928371429443,
+        0.7695347666740417
+      ],
+      "grape_xy_err_m": 0.1441459357738495,
+      "peak_force_N": 0.2549655923751455,
+      "crush_violated": false,
+      "duration_s": 174.77907013893127,
+      "n_frames": 600,
+      "timeout": true
+    },
+    {
+      "trial_idx": 4,
+      "grape_xy": [
+        0.5427561330438687,
+        0.02313077417507869
+      ],
+      "emg_source_demo_id": "stage4_demo_008",
+      "success": false,
+      "grape_final_xyz": [
+        0.5028233528137207,
+        0.006520792841911316,
+        0.7695348858833313
+      ],
+      "grape_xy_err_m": 0.15103615820407867,
+      "peak_force_N": 0.49500621479534446,
+      "crush_violated": false,
+      "duration_s": 179.95255756378174,
+      "n_frames": 600,
+      "timeout": true
+    }
+  ]
+}

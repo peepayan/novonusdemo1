@@ -1,0 +1,40 @@
+Novonus Stage 5 — augmentation dataset summary
+============================================================
+Baselines:                  30
+Raw scenarios generated:    123
+Passing scenarios:          100
+Pass rate:                  81.3%
+Total frames (passing):     41200
+
+Rejection breakdown
+----------------------------------------
+  PATH_DEVIATION           0
+  CONTACT_TIMING           0
+  TASK_FAILURE             0
+  FORCE_OUT_OF_BAND        0
+  FORCE_PROFILE_MISMATCH   23
+  FORCE_OVERSHOOT          0
+
+Force statistics (passing)
+----------------------------------------
+  peak force N (mean):     1.371
+  peak force N (max):      2.045
+  mean force N (mean):     0.611
+  max overshoot observed:  2.045 N
+  crush threshold:         6.000 N
+  all below crush:         True
+
+Parameter distribution (passing)
+----------------------------------------
+  grape_mass_kg            min=0.0040  max=0.0060  mean=0.0050  std=0.0006
+  grape_jaw_friction       min=0.4126  max=0.8978  mean=0.6551  std=0.1391
+  grape_solref0            min=0.0142  max=0.0260  mean=0.0201  std=0.0037
+  approach_angle_rad       min=-0.1724  max=0.1728  mean=-0.0040  std=0.1041
+  table_friction0          min=0.6829  max=0.9197  mean=0.8064  std=0.0662
+  light_ambient_scale      min=0.8020  max=1.1933  mean=0.9847  std=0.1194
+
+Baseline coverage
+----------------------------------------
+  distinct baselines used: 30
+  most productive baselines: [{'baseline_demo_idx': 0, 'count': 4}, {'baseline_demo_idx': 1, 'count': 4}, {'baseline_demo_idx': 2, 'count': 4}]
+  least productive baselines: [{'baseline_demo_idx': 29, 'count': 3}, {'baseline_demo_idx': 28, 'count': 3}, {'baseline_demo_idx': 27, 'count': 3}]

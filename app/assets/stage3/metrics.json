@@ -1,0 +1,33 @@
+{
+  "max_gauge_by_phase": {
+    "REST": 0.0,
+    "REACHING": 0.0,
+    "GRIPPING": 0.3064586281776428,
+    "STABILIZING": 0.2575063586235046,
+    "RELEASING": 0.0
+  },
+  "max_force_N_by_phase": {
+    "REST": 0.0,
+    "REACHING": 0.0,
+    "GRIPPING": 3.0645862817764282,
+    "STABILIZING": 2.5750635862350464,
+    "RELEASING": 0.0
+  },
+  "ticks_by_phase": {
+    "REST": 88,
+    "REACHING": 80,
+    "GRIPPING": 100,
+    "STABILIZING": 100,
+    "RELEASING": 63
+  },
+  "max_contact_force_N": 1.2370473553912955,
+  "ever_exceeded_crush": false,
+  "grape_max_z": 0.8754863142967224,
+  "grape_final_xy_mm_from_zone_centre": 27.21227380835235,
+  "grape_in_target_zone": true,
+  "grape_final_xyz": [
+    0.5238363146781921,
+    0.14251872897148132,
+    0.7695352435112
+  ]
+}
