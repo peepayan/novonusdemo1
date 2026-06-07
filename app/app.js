@@ -146,7 +146,7 @@
         <div class="grid">
           <div class="card col-8">
             <h4>Live oscilloscope — raw + processed</h4>
-            <video src="${s.video}" poster="${s.poster}" muted loop playsinline controls></video>
+            <video class="big" src="${s.video}" poster="${s.poster}" muted loop playsinline controls></video>
             <div class="caption">Real surface EMG from operator forearm muscles, Ninapro DB2.</div>
           </div>
           <div class="card col-4">
@@ -300,7 +300,7 @@
           </div>
           <div class="card col-8">
             <h4>Live intent label + force gauge</h4>
-            <video src="${s.video}" muted loop playsinline controls></video>
+            <video class="big" src="${s.video}" muted loop playsinline controls></video>
             <div class="caption">Real preview clip: rolling EMG, predicted intent class, and the force-head gauge.</div>
           </div>
           <div class="card col-4">
@@ -456,27 +456,27 @@
 
       <div class="reveal">
         <div class="grid">
-          <div class="card col-5">
+          <div class="card col-12">
+            <h4>Synced demo — EMG drives arm, force-gauge live</h4>
+            <video class="big" src="${s.video}" muted loop playsinline controls></video>
+            <div class="caption">Each phase (REACHING → GRIPPING → STABILIZING → RELEASING) is driven by the LSTM's predicted intent. Force gauge stays below the crush threshold.</div>
+          </div>
+          <div class="card col-6">
             <h4>Scene render</h4>
             <img src="${s.scene_render}" alt="UR5e + grape scene render" />
             <div class="caption">${s.arm} + grape on table. Simulated in ${s.simulator}.</div>
           </div>
-          <div class="card col-7">
-            <h4>Synced demo — EMG drives arm, force-gauge live</h4>
-            <video src="${s.video}" muted loop playsinline controls></video>
-            <div class="caption">Each phase (REACHING → GRIPPING → STABILIZING → RELEASING) is driven by the LSTM's predicted intent. Force gauge stays below the crush threshold.</div>
-          </div>
-          <div class="card col-12">
+          <div class="card col-6">
             <h4>Crush-threshold safety</h4>
             <div class="crush-scale"><span>0 N</span><span>6 N (crush)</span></div>
             <div class="crush-bar">
               <div class="crush-marker" data-label="max contact ${s.max_contact_N.toFixed(2)} N" style="left:${(s.max_contact_N / s.crush_threshold_N * 100).toFixed(1)}%"></div>
             </div>
-            <div class="stat-row" style="margin-top: 24px;">
+            <div class="stat-row" style="margin-top: 24px; flex-direction: column;">
               <div class="stat"><div class="stat-label">Max contact</div><div class="stat-value ok">${s.max_contact_N.toFixed(2)} N</div><div class="stat-sub">across the full clip</div></div>
               <div class="stat"><div class="stat-label">Crush threshold</div><div class="stat-value">${s.crush_threshold_N.toFixed(1)} N</div></div>
               <div class="stat"><div class="stat-label">Ever exceeded?</div><div class="stat-value ok">${s.ever_exceeded_crush ? "YES" : "NO"}</div></div>
-              <div class="stat"><div class="stat-label">Grape in target zone</div><div class="stat-value ok">${s.grape_in_target_zone ? "YES" : "NO"}</div></div>
+              <div class="stat"><div class="stat-label">Grape in zone</div><div class="stat-value ok">${s.grape_in_target_zone ? "YES" : "NO"}</div></div>
             </div>
           </div>
         </div>

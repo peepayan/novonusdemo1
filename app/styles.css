@@ -1,20 +1,20 @@
 :root {
-  --bg-0: #07090f;
-  --bg-1: #0d1119;
-  --bg-2: #131825;
-  --bg-3: #1a2030;
-  --border: #232a3d;
-  --text-0: #e8ecf5;
-  --text-1: #aab2c5;
-  --text-2: #6b7488;
+  --bg-0: #000000;
+  --bg-1: #0a0a0a;
+  --bg-2: #111111;
+  --bg-3: #1a1a1a;
+  --border: #262626;
+  --text-0: #f5f5f5;
+  --text-1: #b8b8b8;
+  --text-2: #7a7a7a;
   --accent: #6ee7b7;
-  --accent-glow: rgba(110, 231, 183, 0.25);
+  --accent-glow: rgba(255, 255, 255, 0.35);
   --accent-2: #60a5fa;
   --warn: #f59e0b;
   --danger: #ef4444;
   --ok: #22c55e;
   --gauge: #34d399;
-  --shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.65);
   --radius: 12px;
   --t-fast: 180ms cubic-bezier(.4,0,.2,1);
   --t-mid: 320ms cubic-bezier(.4,0,.2,1);
@@ -26,10 +26,7 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background:
-    radial-gradient(1100px 600px at 80% -10%, rgba(96, 165, 250, 0.08), transparent 60%),
-    radial-gradient(900px 500px at 10% 110%, rgba(110, 231, 183, 0.06), transparent 60%),
-    var(--bg-0);
+  background: var(--bg-0);
   color: var(--text-0);
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -49,21 +46,23 @@ body {
   justify-content: space-between;
   padding: 14px 28px;
   border-bottom: 1px solid var(--border);
-  background: rgba(13, 17, 25, 0.7);
+  background: rgba(0, 0, 0, 0.92);
   backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 30;
 }
 .brand { display: flex; align-items: center; gap: 12px; }
 .brand-mark {
   width: 36px; height: 36px;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #06121a;
+  background: #ffffff;
+  color: #000;
   font-weight: 800;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 24px var(--accent-glow);
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.45);
 }
-.brand-title { font-weight: 700; font-size: 16px; letter-spacing: 0.2px; }
-.brand-sub { font-size: 12px; color: var(--text-2); }
+.brand-title { font-weight: 700; font-size: 18px; letter-spacing: 0.2px; }
 .header-meta { font-size: 12px; color: var(--text-1); display: flex; align-items: center; gap: 8px; }
 .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .dot-live { background: var(--accent); box-shadow: 0 0 12px var(--accent); animation: pulse 1.8s ease-in-out infinite; }
@@ -73,45 +72,54 @@ body {
 .stage-nav {
   display: flex;
   gap: 0;
-  padding: 18px 28px 6px;
+  padding: 16px 28px 14px;
   overflow-x: auto;
   border-bottom: 1px solid var(--border);
-  background: rgba(7, 9, 15, 0.4);
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 65px;
+  z-index: 25;
 }
 .stage-pill {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px;
+  padding: 12px 18px;
   border: 1px solid var(--border);
   background: var(--bg-1);
   color: var(--text-1);
   cursor: pointer;
   border-radius: 999px;
   margin-right: 8px;
-  font-size: 13px;
+  font-size: 14px;
   white-space: nowrap;
   transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
-  min-height: 36px;
+  min-height: 42px;
+  font-weight: 500;
 }
 .stage-pill:hover { background: var(--bg-2); color: var(--text-0); }
 .stage-pill.active {
-  background: linear-gradient(135deg, rgba(110, 231, 183, 0.18), rgba(96, 165, 250, 0.12));
+  background: #ffffff;
+  color: #000;
+  border-color: #ffffff;
+  box-shadow: 0 0 22px rgba(255, 255, 255, 0.35);
+}
+.stage-pill.done {
+  border-color: rgba(34, 197, 94, 0.45);
   color: var(--text-0);
-  border-color: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent-glow);
 }
 .stage-pill .num {
-  width: 22px; height: 22px;
+  width: 24px; height: 24px;
   border-radius: 50%;
   background: var(--bg-3);
   color: var(--text-1);
-  font-size: 11px;
+  font-size: 12px;
   display: flex; align-items: center; justify-content: center;
-  font-weight: 600;
+  font-weight: 700;
 }
-.stage-pill.active .num { background: var(--accent); color: #06121a; }
-.stage-pill.done .num { background: var(--accent); color: #06121a; }
+.stage-pill.active .num { background: #000; color: #fff; }
+.stage-pill.done .num { background: var(--ok); color: #000; }
 .stage-pill.done .num::before { content: "✓"; }
 .stage-pill.done .num span { display: none; }
 .stage-pill .label { font-weight: 500; }
@@ -126,13 +134,13 @@ body {
 /* MAIN ------------------------------------------------------------- */
 .app-main {
   flex: 1;
-  padding: 28px;
+  padding: 32px;
   display: flex;
   justify-content: center;
 }
 .screen {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1500px;
   display: none;
   animation: fadeIn 320ms ease;
 }
@@ -152,9 +160,9 @@ body {
 .action-card {
   display: flex; align-items: center; justify-content: space-between;
   gap: 18px;
-  padding: 18px 22px;
+  padding: 20px 24px;
   border: 1px solid var(--border);
-  background: linear-gradient(180deg, var(--bg-2), var(--bg-1));
+  background: var(--bg-1);
   border-radius: var(--radius);
   margin: 14px 0 22px;
 }
@@ -167,21 +175,21 @@ body {
   font-size: 18px;
 }
 .btn-primary {
-  background: linear-gradient(135deg, var(--accent), #34d399);
-  color: #06121a;
+  background: #ffffff;
+  color: #000;
   font-weight: 700;
   border: none;
-  padding: 12px 22px;
+  padding: 14px 26px;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
   letter-spacing: 0.3px;
-  box-shadow: 0 8px 24px rgba(52, 211, 153, 0.25);
+  box-shadow: 0 0 28px rgba(255, 255, 255, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.12);
   transition: transform var(--t-fast), box-shadow var(--t-fast), filter var(--t-fast);
 }
-.btn-primary:hover { transform: translateY(-1px); filter: brightness(1.05); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 0 38px rgba(255, 255, 255, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.2); }
 .btn-primary:active { transform: translateY(0); }
-.btn-primary:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
 
 .action-desc { color: var(--text-1); font-size: 14px; max-width: 560px; }
 
@@ -220,14 +228,14 @@ body {
   gap: 18px;
 }
 .card {
-  background: linear-gradient(180deg, var(--bg-2), var(--bg-1));
+  background: var(--bg-1);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 16px;
+  padding: 18px;
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 .card h4 {
   margin: 0;
@@ -253,6 +261,10 @@ body {
   display: block;
   background: #000;
   border: 1px solid var(--border);
+}
+.card video.big, .card img.big {
+  min-height: 480px;
+  object-fit: contain;
 }
 
 /* STAT CALLOUTS ---------------------------------------------------- */
@@ -488,21 +500,21 @@ body {
 .summary-hero {
   text-align: center;
   padding: 60px 40px;
-  background: linear-gradient(180deg, var(--bg-2), var(--bg-1));
+  background: var(--bg-1);
   border: 1px solid var(--border);
   border-radius: 16px;
   box-shadow: var(--shadow);
 }
 .summary-mark {
-  width: 64px; height: 64px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #06121a;
+  width: 72px; height: 72px;
+  border-radius: 18px;
+  background: #ffffff;
+  color: #000;
   font-weight: 800;
-  font-size: 32px;
+  font-size: 36px;
   display: flex; align-items: center; justify-content: center;
   margin: 0 auto 18px;
-  box-shadow: 0 0 40px var(--accent-glow);
+  box-shadow: 0 0 50px rgba(255, 255, 255, 0.55);
 }
 .summary-title { font-size: 38px; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 8px; }
 .summary-sub { color: var(--text-1); font-size: 16px; max-width: 640px; margin: 0 auto 30px; }
@@ -520,7 +532,10 @@ body {
   display: flex; align-items: center; justify-content: space-between;
   padding: 14px 28px;
   border-top: 1px solid var(--border);
-  background: rgba(13, 17, 25, 0.7);
+  background: rgba(0, 0, 0, 0.92);
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
 }
 .footer-hint { font-size: 12px; color: var(--text-2); }
 .nav-btn {
