@@ -1,0 +1,11 @@
+.venv
+__pycache__
+src
+data
+outputs
+*.pyc
+*.pyo
+requirements.txt
+verify_setup.py
+CLAUDE.md
+screenshots

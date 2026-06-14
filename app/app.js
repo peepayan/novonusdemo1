@@ -6,6 +6,7 @@
   const D = window.NOVONUS;
 
   const stages = [
+    { id: "s0", title: "Home", short: "Home" },
     { id: "s1", title: "Capture EMG", short: "Capture EMG" },
     { id: "s2", title: "Signal Processing (DSP)", short: "DSP" },
     { id: "s3", title: "Intent + Force Model", short: "LSTM (Intent + Force)" },
@@ -112,6 +113,21 @@
   }
 
   // ---------- screen builders ------------------------------------------
+
+  // STAGE 0 — Home
+  function buildScreen0() {
+    const sc = el("section", "screen", "");
+    sc.id = "screen-s0";
+    sc.innerHTML = `
+      <div class="summary-hero">
+        <div class="summary-mark">N</div>
+        <h2 class="summary-title">Novonus</h2>
+        <div class="summary-sub">Novonus software training pipeline demo</div>
+        <div class="summary-next">Use Next → or the stage bar above to begin.</div>
+      </div>
+    `;
+    return sc;
+  }
 
   // STAGE 1 — Capture EMG
   function buildScreen1() {
@@ -854,6 +870,7 @@
 
   // ---------- mount -----------------------------------------------------
   function mount() {
+    mainEl.appendChild(buildScreen0());
     mainEl.appendChild(buildScreen1());
     mainEl.appendChild(buildScreen2());
     mainEl.appendChild(buildScreen3());
