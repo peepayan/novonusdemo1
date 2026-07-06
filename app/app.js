@@ -120,7 +120,7 @@
     sc.id = "screen-s0";
     sc.innerHTML = `
       <div class="summary-hero">
-        <img class="summary-mark" src="assets/novonus-logo.png" alt="Novonus" />
+        <div class="summary-mark">N</div>
         <h2 class="summary-title">Novonus</h2>
         <div class="summary-sub">Novonus software training pipeline demo</div>
         <div class="summary-next">Use Next → or the stage bar above to begin.</div>
@@ -837,7 +837,7 @@
     sc.id = "screen-summary";
     sc.innerHTML = `
       <div class="summary-hero">
-        <img class="summary-mark" src="assets/novonus-logo.png" alt="Novonus" />
+        <div class="summary-mark">N</div>
         <h2 class="summary-title">Novonus</h2>
         <div class="summary-sub">Force-intelligence for collaborative robots — EMG-conditioned policies that learn force-aware manipulation from operator demonstrations.</div>
         <div class="summary-stats">

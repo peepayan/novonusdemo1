@@ -28,7 +28,7 @@ html, body {
   height: 100%;
   background: var(--bg-0);
   color: var(--text-0);
-  font-family: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -59,8 +59,11 @@ body {
 .brand-mark {
   width: 36px; height: 36px;
   border-radius: 10px;
-  object-fit: contain;
-  display: block;
+  background: #ffffff;
+  color: #000;
+  font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.45);
 }
 .brand-title { font-weight: 700; font-size: 18px; letter-spacing: 0.2px; }
 .header-meta { font-size: 12px; color: var(--text-1); display: flex; align-items: center; gap: 8px; }
@@ -74,7 +77,7 @@ body {
   align-items: center;
   gap: 0;
   padding: 16px 28px;
-  overflow: hidden;
+  overflow-x: auto;
   border-bottom: 1px solid var(--border);
   background: #000;
   position: fixed;
@@ -514,9 +517,13 @@ body {
 .summary-mark {
   width: 72px; height: 72px;
   border-radius: 18px;
-  object-fit: contain;
-  display: block;
+  background: #ffffff;
+  color: #000;
+  font-weight: 800;
+  font-size: 36px;
+  display: flex; align-items: center; justify-content: center;
   margin: 0 auto 18px;
+  box-shadow: 0 0 50px rgba(255, 255, 255, 0.55);
 }
 .summary-title { font-size: 38px; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 8px; }
 .summary-sub { color: var(--text-1); font-size: 16px; max-width: 640px; margin: 0 auto 30px; }

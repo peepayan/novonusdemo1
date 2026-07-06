@@ -42,5 +42,3 @@ Thumbs.db
 
 # stage7: cloned upstream reference, not part of our project history
 src/stage7_diffusion/diffusion_policy_ref/
-
-.vercel
