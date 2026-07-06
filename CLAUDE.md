@@ -1,0 +1,115 @@
+# Novonus — novonusdemo1
+
+EMG-augmented imitation learning pipeline for contact-rich robotic manipulation.
+Demo/scratch sibling of `novonusfinal`. Treat as its own repo — do not cross-pollinate files.
+
+## Hardware target
+
+- GPU: NVIDIA RTX 5060 (Blackwell, sm_120, 8 GB VRAM)
+- CUDA: 12.8+
+- PyTorch build: `torch==2.11.0+cu128` (Blackwell-specific wheels)
+
+## Environment
+
+- Python venv: `.venv/` at project root
+- Activate: `.venv\Scripts\activate` (Windows)
+- Install: `pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu128`
+- Verify: `python verify_setup.py` (checks CUDA/sm_120, MuJoCo Warp GPU, DINOv2 forward pass)
+
+## Key dependencies
+
+| Package | Version | Role |
+|---|---|---|
+| torch+cu128 | 2.11.0 | Core ML, Blackwell CUDA |
+| mujoco | 3.9.0 | Physics simulation |
+| warp-lang | 1.14.0 | GPU physics backend |
+| mujoco-warp | 3.9.0.1 | MuJoCo + Warp integration |
+| transformers | 5.10.2 | DINOv2 vision backbone |
+| numpy | 2.4.4 | Arrays |
+| scipy | 1.17.1 | DSP filters |
+
+## Project structure
+
+```
+novonusdemo1/
+├── src/
+│   ├── stage1_emg/          # Ninapro DB2 loader + EMG DSP pipeline
+│   ├── stage2_lstm/         # LSTM intent classifier + force regressor
+│   ├── stage3_sim/          # MuJoCo Warp GPU simulation + scene builder
+│   ├── stage4_demos/        # Manual demo recording (joystick) + EMG pairing
+│   ├── stage5_augmentation/ # Physics-validated demo augmentation
+│   └── stage7_diffusion/    # EMG-conditioned Diffusion Policy
+├── data/
+│   └── ninapro_db2/DB2_s1/  # .mat files (E1, E2, E3 blocks) — gitignored
+├── outputs/
+│   └── stage{1-7}/          # Artifacts per stage — gitignored
+├── app/                     # Single-page web demo (HTML/CSS/JS)
+│   ├── index.html
+│   ├── app.js               # 8-stage state machine
+│   ├── data.js              # Artifact traceability sources
+│   └── styles.css
+├── requirements.txt
+└── verify_setup.py
+```
+
+No `setup.py` or `pyproject.toml` — not a package. Run stages as modules.
+
+## Running the pipeline
+
+Each stage has a `run_stage<N>.py` entry point. Run pattern:
+
+```bash
+python -m src.stage1_emg.run_stage1 --subject DB2_s1 --out outputs/stage1 --save-mp4 outputs/stage1/osc.mp4
+python -m src.stage2_lstm.run_stage2 --epochs 50 --batch-size 128 --save-mp4
+python -m src.stage3_sim.run_stage3
+python -m src.stage4_demos.run_stage4
+python -m src.stage5_augmentation.run_stage5
+python -m src.stage7_diffusion.run_stage7 --epochs 200 --n-trials 5
+```
+
+All stages accept `--help`.
+
+## Pipeline data flow
+
+1. **Stage 1** — Load Ninapro DB2 (12-ch EMG @ 2 kHz, 36-ch accel, 22-ch glove) → DSP chain (HP → Notch → BP → Rect → RMS → MVC-norm for EMG; LP for accel/glove) → save arrays + oscilloscope MP4
+2. **Stage 2** — Windowed dataset (T=400, 200 ms) from Stage 1 → train `IntentForceLSTM` (2-layer LSTM, 128-dim hidden, 5-class intent + force scalar) on E1+E2 blocks → validate on held-out E3 block → confusion matrix + force overlay
+3. **Stage 3** — Build canonical `scene.xml` (UR5e + table + grape + parallel gripper + camera) → init MuJoCo Warp GPU backend → render idle + EMG-synced phases (REST→REACH→GRIP→STAB→RELEASE) → validate crush/grip thresholds
+4. **Stage 4** — Record manual demonstrations via joystick-controlled UR5e → pair synchronized EMG → save trajectories + video
+5. **Stage 5** — Re-simulate Stage 4 demos under randomized physics (grape pose/mass/friction/stiffness, approach angle, lighting, table friction) → 6-point verification filter → unified dataset (Stage 4 + Stage 5 augmentations)
+6. **Stage 7** — Pair EMG to augmented scenarios → cache DINOv2 + LSTM hidden + robot state features → train Conditional 1D UNet diffusion policy (16-step action rollout) conditioned on EMG hidden state → execute on 5 test scenarios
+
+## Key constants (Stage 3)
+
+- Grape crush threshold: **6.0 N**
+- Safe grip band: **2.0 – 4.0 N**
+- Sim timestep: **2 ms** (500 Hz)
+
+## ML architecture summary
+
+| Component | Details |
+|---|---|
+| Vision backbone | DINOv2 `facebook/dinov2-base` (frozen) |
+| Temporal EMG model | 2-layer LSTM → 128-dim hidden → 5-class intent + force scalar |
+| Policy | Conditional 1D UNet diffusion, 16-step action horizon |
+| Observation | Camera frame + EMG window + robot state (joint angles + gripper) |
+| EMG conditioning | Stage 2 LSTM hidden state fused into diffusion conditioning vector |
+
+## Web demo
+
+Served from `app/` via `python -m http.server --directory app 8000` → `http://localhost:8000`
+
+8-stage walkthrough with real artifacts (loss curves, confusion matrix, MP4s, metrics). Navigate with stage flow bar or ← / → keys. All metrics pulled from real output files — no mock data.
+
+## Data
+
+- **Ninapro DB2, subject DB2_s1** — blocks E1 (repetitions 1-5), E2, E3 (held-out for validation)
+- `.mat` files live in `data/ninapro_db2/DB2_s1/` — gitignored, tracked via `.gitkeep`
+- `outputs/` is also gitignored — artifacts are regenerated by running stages
+
+## Git remote
+
+`https://github.com/peepayan/novonusdemo1.git` (private)
+
+## Stage 7 honest status (as of bootstrap)
+
+Task completion: **0/5** test scenarios — policy needs more demo diversity. This is displayed honestly in the web demo rather than fabricated.
