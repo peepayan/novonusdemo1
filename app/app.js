@@ -94,6 +94,10 @@
     r.classList.add("active");
   }
 
+  function loadVideos(sc) {
+    sc.querySelectorAll("video[data-src]").forEach(v => { v.src = v.dataset.src; });
+  }
+
   // Count-up easing for stat numbers
   function countUp(elNode, target, durationMs, opts) {
     opts = opts || {};
@@ -114,22 +118,34 @@
 
   // ---------- screen builders ------------------------------------------
 
-  // STAGE 0 — Home
+  // STAGE 0,Home
   function buildScreen0() {
     const sc = el("section", "screen", "");
     sc.id = "screen-s0";
     sc.innerHTML = `
-      <div class="summary-hero">
-        <div class="summary-mark">N</div>
-        <h2 class="summary-title">Novonus</h2>
-        <div class="summary-sub">Novonus software training pipeline demo</div>
-        <div class="summary-next">Use Next → or the stage bar above to begin.</div>
+      <div class="home-card">
+        <img src="assets/novonus-logo.png" class="home-logo" alt="Novonus" />
+        <h1 class="home-title">Novonus</h1>
+        <p class="home-sub">Force-intelligence for collaborative robots, EMG-conditioned policies that learn force-aware manipulation from operator demonstrations.</p>
+        <div class="capability-pills">
+          <span class="capability-pill">EMG → Intent → Force</span>
+          <span class="capability-pill">Simulation + Augmentation</span>
+          <span class="capability-pill">Diffusion Policy</span>
+        </div>
+        <div class="home-cta-hint">
+          <span class="arrow">→</span>
+          <span>Use <strong>Next →</strong> or the stage bar above to begin the walkthrough.</span>
+        </div>
+      </div>
+      <div class="home-context">
+        <div class="home-context-label">What this demo is</div>
+        <p>This is a focused, single-modality walkthrough of the Novonus pipeline, trained end-to-end on EMG data alone, drawn from the public Ninapro DB2 dataset. It demonstrates the core, hardest-to-prove piece of the system: predicting real grip force and intent directly from muscle signals. The full Novonus product captures four synchronized data streams (EMG, force, motion, and vision) from a live multimodal hardware rig; this demo isolates the EMG-to-force pathway to show, with full transparency, the validated result the rest of the system is built on. Every stage below reflects what's actually implemented and tested in software and simulation today.</p>
       </div>
     `;
     return sc;
   }
 
-  // STAGE 1 — Capture EMG
+  // STAGE 1,Capture EMG
   function buildScreen1() {
     const s = D.stage1;
     const sc = el("section", "screen", "");
@@ -143,6 +159,15 @@
             <div class="stage-subtitle">Surface EMG acquisition from operator forearm muscles. Ninapro DB2, subject ${s.subject}, dry-electrode grid.</div>
           </div>
         </div>
+      </div>
+
+      <div class="stage-context">
+        <div class="ctx-item">Raw EMG signal is captured from Ninapro DB2, muscle activity recorded during real hand and grip movements.</div>
+        <div class="ctx-item">This stands in for the live capture step of the full rig, where an operator wears the sensor system and performs a task by hand.</div>
+        <div class="ctx-item">The goal of this stage: get a clean, real recording of muscle activity to work from.</div>
+        <div class="ctx-item">The raw EMG signal is visualized here as multi-channel muscle activity over time.</div>
+        <div class="ctx-item">This is the unprocessed input, noisy, high-frequency electrical activity straight from the muscle.</div>
+        <div class="ctx-item">Nothing has been filtered or interpreted yet; this is what the sensors actually pick up.</div>
       </div>
 
       <div class="action-card">
@@ -161,8 +186,8 @@
       <div class="reveal">
         <div class="grid">
           <div class="card col-8">
-            <h4>Live oscilloscope — raw + processed</h4>
-            <video class="big" src="${s.video}" poster="${s.poster}" muted loop playsinline controls></video>
+            <h4>Live oscilloscope, raw + processed</h4>
+            <video class="big" data-src="${s.video}" poster="${s.poster}" muted loop playsinline preload="none" controls></video>
             <div class="caption">Real surface EMG from operator forearm muscles, Ninapro DB2.</div>
           </div>
           <div class="card col-4">
@@ -184,13 +209,14 @@
     sc.querySelector(".btn-primary").addEventListener("click", async () => {
       await runLoader("s1", "Acquiring signal…", 900);
       revealContent("s1");
+      loadVideos(sc);
       const v = sc.querySelector("video");
-      if (v) { v.play().catch(()=>{}); }
+      if (v) { v.load(); v.play().catch(()=>{}); }
     });
     return sc;
   }
 
-  // STAGE 2 — DSP
+  // STAGE 2,DSP
   function buildScreen2() {
     const s = D.stage2;
     const sc = el("section", "screen", "");
@@ -204,6 +230,12 @@
             <div class="stage-subtitle">Raw EMG is noisy. We run a 6-stage chain to extract a clean activation envelope.</div>
           </div>
         </div>
+      </div>
+
+      <div class="stage-context">
+        <div class="ctx-item">The raw signal is cleaned: filtered to remove noise and drift, rectified, and smoothed into a usable activation envelope.</div>
+        <div class="ctx-item">Includes normalization so the signal is consistent and comparable across channels and sessions.</div>
+        <div class="ctx-item">This turns messy raw muscle data into a clean feature the model can actually learn from.</div>
       </div>
 
       <div class="action-card">
@@ -239,7 +271,7 @@
           <div class="card col-6">
             <h4>Raw → clean</h4>
             <img src="${D.stage1.still}" alt="raw vs clean EMG" />
-            <div class="caption">Top: raw multi-channel EMG. Bottom: the MVC-normalized envelope after the filter chain — what downstream models consume.</div>
+            <div class="caption">Top: raw multi-channel EMG. Bottom: the MVC-normalized envelope after the filter chain, what downstream models consume.</div>
           </div>
         </div>
       </div>
@@ -261,7 +293,7 @@
     return sc;
   }
 
-  // STAGE 3 — Intent + Force (LSTM)
+  // STAGE 3,Intent + Force (LSTM)
   function buildScreen3() {
     const s = D.stage2;
     const s1 = D.stage1;
@@ -270,7 +302,7 @@
     sc.innerHTML = `
       <div class="stage-header">
         <div class="stage-title-wrap">
-          <span class="stage-eyebrow">Stage 3 — LSTM training</span>
+          <span class="stage-eyebrow">Stage 3, LSTM training</span>
           <div>
             <h2 class="stage-title">Intent + Force Model <span style="font-size:14px; padding:4px 10px; border:1px solid var(--accent); border-radius:999px; color:var(--accent); margin-left:10px; vertical-align:middle; letter-spacing:1px;">LSTM</span></h2>
             <div class="stage-subtitle"><strong>This is where the LSTM is trained.</strong> A bidirectional LSTM maps 12-channel EMG envelopes to (a) intent class and (b) an EMG-amplitude force proxy. Architecture: 2-layer BiLSTM (128 hidden) → two heads: 5-way softmax (intent) + 1-d regression (force). Train data: Ninapro DB2 windows; loss: cross-entropy + λ·MSE.</div>
@@ -278,11 +310,17 @@
         </div>
       </div>
 
+      <div class="stage-context">
+        <div class="ctx-item">A recurrent neural network reads the processed EMG signal and predicts two things at once: what the hand is doing (intent: reach/grip/stabilize/release) and how much force is being applied.</div>
+        <div class="ctx-item">This is the core model of the demo, it learns the mapping from muscle activity to real physical behavior.</div>
+        <div class="ctx-item">Trained and validated on held-out data the model never saw during training.</div>
+      </div>
+
       <div class="action-card">
         <div class="left">
           <div class="action-icon">⌬</div>
           <div>
-            <div style="font-weight:600">Train LSTM — Classify Intent + Predict Force</div>
+            <div style="font-weight:600">Train LSTM: Classify Intent + Predict Force</div>
             <div class="action-desc">Replay the real LSTM training run (loss curve), then show the trained model's live label + force gauge and the confusion matrix.</div>
           </div>
         </div>
@@ -293,8 +331,8 @@
 
       <div class="reveal">
         <div class="grid">
-          <div class="card col-8">
-            <h4>LSTM training — real loss curve replay</h4>
+          <div class="card col-7">
+            <h4>LSTM training, real loss curve replay</h4>
             <div class="replay-wrap" id="s3-replay">
               <img src="${s.loss_curve}" alt="LSTM training loss curve" />
               <div class="replay-hud">
@@ -306,7 +344,7 @@
             </div>
             <div class="caption"><strong style="color:var(--accent)">LSTM trained here.</strong> Best validation intent accuracy <strong>${s.best_val_intent_acc_pct.toFixed(2)}%</strong> at epoch ${s.best_epoch}. This is a replay of the saved training curve, not live training. Checkpoint saved at <code class="mono" style="color:var(--text-1)">outputs/stage2/lstm_best.pt</code>.</div>
           </div>
-          <div class="card col-4">
+          <div class="card col-5">
             <h4>Intent classes</h4>
             <div class="stat-row" style="flex-direction:column">
               <div class="stat"><div class="stat-label">Val accuracy</div><div class="stat-value accent" id="s3-acc-big">0.00%</div><div class="stat-sub">held-out windows</div></div>
@@ -314,12 +352,12 @@
               <div class="stat"><div class="stat-label">Force MSE</div><div class="stat-value">${s.best_val_force_mse.toExponential(2)}</div><div class="stat-sub">EMG-amplitude proxy target</div></div>
             </div>
           </div>
-          <div class="card col-8">
+          <div class="card col-6">
             <h4>Live intent label + force gauge</h4>
-            <video class="big" src="${s.video}" muted loop playsinline controls></video>
+            <video class="big" data-src="${s.video}" muted loop playsinline preload="none" controls></video>
             <div class="caption">Real preview clip: rolling EMG, predicted intent class, and the force-head gauge.</div>
           </div>
-          <div class="card col-4">
+          <div class="card col-6">
             <h4>Confusion matrix</h4>
             <img src="${s.confusion_matrix}" alt="confusion matrix" />
             <div class="caption">Diagonal-heavy across 5 classes on held-out windows.</div>
@@ -330,6 +368,7 @@
     sc.querySelector(".btn-primary").addEventListener("click", async () => {
       await runLoader("s3", "Loading LSTM checkpoint…", 700);
       revealContent("s3");
+      loadVideos(sc);
       // animate epoch / acc / mask wipe
       const mask = sc.querySelector("#s3-mask");
       const epochEl = sc.querySelector("#s3-epoch");
@@ -352,12 +391,12 @@
       }
       requestAnimationFrame(tick);
       const v = sc.querySelector("video");
-      if (v) v.play().catch(()=>{});
+      if (v) { v.load(); v.play().catch(()=>{}); }
     });
     return sc;
   }
 
-  // STAGE 4 — Force Validation
+  // STAGE 4,Force Validation
   function buildScreen4() {
     const s = D.stage2_force;
     const sc = el("section", "screen", "");
@@ -371,6 +410,12 @@
             <div class="stage-subtitle">Validate EMG-predicted force against real 6-axis force-sensor measurements on a held-out repetition.</div>
           </div>
         </div>
+      </div>
+
+      <div class="stage-context">
+        <div class="ctx-item">The model's predicted force is checked against real, measured force from a calibrated sensor.</div>
+        <div class="ctx-item">This is the headline result: an R² of 0.96, meaning the model's force predictions closely match real, physical grip force.</div>
+        <div class="ctx-item">This stage proves the core bet of the entire company: muscle signals genuinely carry usable, accurate force information.</div>
       </div>
 
       <div class="action-card">
@@ -441,7 +486,7 @@
     return sc;
   }
 
-  // STAGE 5 — Simulation Scene
+  // STAGE 5,Simulation Scene
   function buildScreen5() {
     const s = D.stage3;
     const sc = el("section", "screen", "");
@@ -455,6 +500,12 @@
             <div class="stage-subtitle">${s.arm} + ${s.target} in ${s.simulator}. Operator EMG drives the arm; the policy must keep contact force below the crush threshold.</div>
           </div>
         </div>
+      </div>
+
+      <div class="stage-context">
+        <div class="ctx-item">The validated force and intent predictions are used to drive a physics simulation: a robot arm handling an object based on the learned force behavior.</div>
+        <div class="ctx-item">This shows the predicted force translating into physical, simulated action.</div>
+        <div class="ctx-item">The simulation includes a fragile object and a defined force threshold, so incorrect force is visibly detectable.</div>
       </div>
 
       <div class="action-card">
@@ -473,8 +524,8 @@
       <div class="reveal">
         <div class="grid">
           <div class="card col-12">
-            <h4>Synced demo — EMG drives arm, force-gauge live</h4>
-            <video class="big" src="${s.video}" muted loop playsinline controls></video>
+            <h4>Synced demo, EMG drives arm, force-gauge live</h4>
+            <video class="big" data-src="${s.video}" muted loop playsinline preload="none" controls></video>
             <div class="caption">Each phase (REACHING → GRIPPING → STABILIZING → RELEASING) is driven by the LSTM's predicted intent. Force gauge stays below the crush threshold.</div>
           </div>
           <div class="card col-6">
@@ -501,19 +552,20 @@
     sc.querySelector(".btn-primary").addEventListener("click", async () => {
       await runLoader("s5", "Loading MuJoCo scene…", 900);
       revealContent("s5");
+      loadVideos(sc);
       const v = sc.querySelector("video");
-      if (v) v.play().catch(()=>{});
+      if (v) { v.load(); v.play().catch(()=>{}); }
     });
     return sc;
   }
 
-  // STAGE 6 — Augmentation + Verification
+  // STAGE 6,Augmentation + Verification
   function buildScreen6() {
     const s = D.stage5;
     const totalTiles = 100; // we visualize 100 passing scenarios as the tile count
     const sc = el("section", "screen", "");
     sc.id = "screen-s6";
-    // we mark 23 tiles as rejected (FORCE_PROFILE_MISMATCH) — same number as real data
+    // we mark 23 tiles as rejected (FORCE_PROFILE_MISMATCH),same number as real data
     const rejectionIdxs = new Set();
     while (rejectionIdxs.size < s.rejection_breakdown.FORCE_PROFILE_MISMATCH) {
       rejectionIdxs.add(Math.floor(Math.random() * 123));
@@ -529,6 +581,12 @@
             <div class="stage-subtitle">${s.n_baselines} baseline demonstrations re-simulated under randomized physics, then filtered through a 6-point verification.</div>
           </div>
         </div>
+      </div>
+
+      <div class="stage-context">
+        <div class="ctx-item">A small number of real demonstrations are expanded into many simulated variations, different positions, conditions, and trajectories.</div>
+        <div class="ctx-item">Every generated scenario is checked against the real captured force data, and anything that doesn't match is discarded.</div>
+        <div class="ctx-item">This is how the system scales limited real data into a larger, still physically valid training set.</div>
       </div>
 
       <div class="action-card">
@@ -547,7 +605,7 @@
       <div class="reveal">
         <div class="grid">
           <div class="card col-7">
-            <h4>Scenario tiles — randomized physics</h4>
+            <h4>Scenario tiles, randomized physics</h4>
             <div class="aug-tiles" id="s6-tiles"></div>
             <div class="caption" style="margin-top:14px">Each tile is one re-simulated scenario with randomized grape mass, jaw friction, approach angle, table friction, and lighting. Red = filtered out by verification.</div>
           </div>
@@ -582,7 +640,7 @@
           </div>
           <div class="card col-6">
             <h4>Sample scenario clip</h4>
-            <video src="${s.scenario_video}" muted loop playsinline controls></video>
+            <video data-src="${s.scenario_video}" muted loop playsinline preload="none" controls></video>
             <div class="caption">One of the 100 passing scenarios under randomized physics.</div>
           </div>
         </div>
@@ -591,6 +649,7 @@
     sc.querySelector(".btn-primary").addEventListener("click", async () => {
       await runLoader("s6", "Generating randomized scenarios…", 800);
       revealContent("s6");
+      loadVideos(sc);
       // Build tiles, then animate them in
       const tilesEl = sc.querySelector("#s6-tiles");
       tilesEl.innerHTML = "";
@@ -657,7 +716,7 @@
     return sc;
   }
 
-  // STAGE 7 — Policy Training (diffusion)
+  // STAGE 7,Policy Training (diffusion)
   function buildScreen7() {
     const s = D.stage7;
     const sc = el("section", "screen", "");
@@ -671,6 +730,12 @@
             <div class="stage-subtitle">Multimodal diffusion policy: vision (DINOv2) + EMG force intent (LSTM hidden state) + robot state, fused to generate force-aware action sequences.</div>
           </div>
         </div>
+      </div>
+
+      <div class="stage-context">
+        <div class="ctx-item">A diffusion policy is the model that turns everything the system has learned into actual robot actions. It generates a sequence of movements by starting from noise and progressively refining it into a coherent action, guided by what the robot sees and the force intent learned from human demonstration.</div>
+        <div class="ctx-item">We use diffusion because contact-rich tasks have many valid ways to succeed, and unlike simpler methods that average those into one mushy, failing motion, a diffusion policy can represent the full range of correct actions and pick a clean one.</div>
+        <div class="ctx-item">The verified, augmented data trains this policy — a model that outputs actions (movement and force) rather than just predictions. This is the step from understanding force to acting on it.</div>
       </div>
 
       <div class="action-card">
@@ -688,8 +753,8 @@
 
       <div class="reveal">
         <div class="grid">
-          <div class="card col-8">
-            <h4>Training replay — real loss curve</h4>
+          <div class="card col-7">
+            <h4>Training replay, real loss curve</h4>
             <div class="replay-wrap" id="s7-replay">
               <img src="${s.loss_curve}" alt="diffusion training loss curve" />
               <div class="replay-hud">
@@ -701,7 +766,7 @@
             </div>
             <div class="caption">Best val MSE <strong>${s.best_val_mse.toFixed(4)}</strong> at epoch ${s.best_epoch}. Early-stopped at epoch ${s.stopped_epoch}. Wall time ${s.wall_time} on a single RTX 5060.</div>
           </div>
-          <div class="card col-4">
+          <div class="card col-5">
             <h4>Training stats</h4>
             <div class="stat-row" style="flex-direction:column">
               <div class="stat"><div class="stat-label">Best val MSE</div><div class="stat-value accent" id="s7-mse-big">0.0000</div><div class="stat-sub">@ epoch ${s.best_epoch}</div></div>
@@ -711,7 +776,7 @@
           </div>
 
           <div class="card col-12">
-            <h4>Architecture — multimodal fusion</h4>
+            <h4>Architecture, multimodal fusion</h4>
             <div class="arch">
               <div class="arch-col">
                 <div class="arch-block"><span class="name">Vision</span>DINOv2-base (frozen)<br/>640×480 frame → 768 dim</div>
@@ -733,18 +798,23 @@
           <div class="card col-6">
             <h4>Diffusion denoising concept</h4>
             <canvas class="denoise-canvas" id="s7-denoise" width="600" height="120"></canvas>
-            <div class="caption">Illustrative animation only — random noise resolves into a smooth action trajectory over denoising steps. Real inference uses DDIM with 5 steps.</div>
+            <div class="caption">Illustrative animation only, random noise resolves into a smooth action trajectory over denoising steps. Real inference uses DDIM with 5 steps.</div>
           </div>
           <div class="card col-6">
             <h4>Diagnostic replay (real clip)</h4>
-            <video src="${s.diag_video}" muted loop playsinline controls></video>
-            <div class="caption">Ground-truth action sequence replayed through the execute loop — the arm reaches within 9 mm of the grape under 1.34 N contact. Confirms the execution loop is correct.</div>
+            <video data-src="${s.diag_video}" muted loop playsinline preload="none" controls></video>
+            <div class="caption">Ground-truth action sequence replayed through the execute loop, the arm reaches within 9 mm of the grape under 1.34 N contact. Confirms the execution loop is correct.</div>
           </div>
 
           <div class="card col-12">
             <h4>Honest note on closed-loop execution</h4>
             <div class="honest-note">
-              <strong>Training converged</strong> (val MSE settled to ${s.best_val_mse.toFixed(4)} at epoch ${s.best_epoch}). On ${s.closed_loop_trials} fresh closed-loop test scenarios, the policy was <strong>force-safe in every trial</strong> — peak contact ${s.closed_loop_peak_max_N.toFixed(2)} N vs ${s.crush_threshold_N.toFixed(1)} N crush threshold — but task completion was <strong>${s.closed_loop_success} / ${s.closed_loop_trials}</strong>. The failure is classic behavior-cloning compounding error on a 130-sample budget. Closed-loop autonomous execution is in progress pending more demonstration diversity and real hardware data.
+              <span style="display:inline-block; font-size:11px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:#ef4444; border:1px solid rgba(239,68,68,0.4); background:rgba(239,68,68,0.08); border-radius:6px; padding:3px 10px; margin-bottom:12px;">WHY THIS DIDN'T WORK</span>
+              <strong>Training converged</strong> (val MSE settled to ${s.best_val_mse.toFixed(4)} at epoch ${s.best_epoch}). On ${s.closed_loop_trials} fresh closed-loop test scenarios, the policy was <strong>force-safe in every trial</strong>, peak contact ${s.closed_loop_peak_max_N.toFixed(2)} N vs ${s.crush_threshold_N.toFixed(1)} N crush threshold, but task completion was <strong>${s.closed_loop_success} / ${s.closed_loop_trials}</strong>.
+              <br/><br/>
+              In this demo the policy trained and converged cleanly, but it didn't succeed at closed-loop execution, because it was trained on only around 130 samples, most of them from simulation. This is the classic small-data failure mode in imitation learning: tiny errors compound over a trajectory, and the policy hasn't seen enough real, diverse examples to recover from states it wasn't trained on.
+              <br/><br/>
+              The fix is more real-world demonstration data with greater diversity, which is exactly what building the physical hardware rig enables, and it's the next phase of development.
             </div>
           </div>
         </div>
@@ -753,6 +823,7 @@
     sc.querySelector(".btn-primary").addEventListener("click", async () => {
       await runLoader("s7", "Loading diffusion policy + cached features…", 1000);
       revealContent("s7");
+      loadVideos(sc);
       // animate loss replay
       const mask = sc.querySelector("#s7-mask");
       const epochEl = sc.querySelector("#s7-epoch");
@@ -766,7 +837,7 @@
         const t = Math.min(1, (now - start) / dur);
         const eased = 1 - Math.pow(1 - t, 3);
         mask.style.width = (100 - 100 * eased) + "%";
-        // val MSE starts ~0.10 and decays to 0.0066 — model that approximately
+        // val MSE starts ~0.10 and decays to 0.0066,model that approximately
         const v = 0.10 * Math.pow(1 - eased, 1.6) + finalMse * eased;
         epochEl.textContent = Math.round(eased * totalEpochs);
         mseEl.textContent = v.toFixed(4);
@@ -823,7 +894,7 @@
       drawDenoise();
 
       const v = sc.querySelector("video");
-      if (v) v.play().catch(()=>{});
+      if (v) { v.load(); v.play().catch(()=>{}); }
     });
     return sc;
   }
@@ -837,32 +908,37 @@
     sc.id = "screen-summary";
     sc.innerHTML = `
       <div class="summary-hero">
-        <div class="summary-mark">N</div>
+        <img src="assets/novonus-logo.png" class="summary-mark" alt="Novonus" />
         <h2 class="summary-title">Novonus</h2>
-        <div class="summary-sub">Force-intelligence for collaborative robots — EMG-conditioned policies that learn force-aware manipulation from operator demonstrations.</div>
+        <div class="summary-sub">Force-intelligence for collaborative robots, EMG-conditioned policies that learn force-aware manipulation from operator demonstrations.</div>
         <div class="summary-stats">
-          <div class="stat">
-            <div class="stat-label">Intent accuracy</div>
-            <div class="stat-value accent">${s2.best_val_intent_acc_pct.toFixed(2)}%</div>
-            <div class="stat-sub">${s2.n_intent_classes}-class LSTM on Ninapro DB2</div>
+          <div class="summary-metric">
+            <span class="m-label">Intent accuracy</span>
+            <span class="m-value">${s2.best_val_intent_acc_pct.toFixed(2)}%</span>
+            <span class="m-sub">${s2.n_intent_classes}-class LSTM on Ninapro DB2</span>
           </div>
-          <div class="stat">
-            <div class="stat-label">Force prediction</div>
-            <div class="stat-value accent">R² = ${s2f.r_squared.toFixed(2)}</div>
-            <div class="stat-sub">EMG → real 6-axis force, held-out test</div>
+          <div class="summary-metric">
+            <span class="m-label">Force prediction</span>
+            <span class="m-value">R² = ${s2f.r_squared.toFixed(2)}</span>
+            <span class="m-sub">EMG → real 6-axis force, held-out test</span>
           </div>
-          <div class="stat">
-            <div class="stat-label">Augmented dataset</div>
-            <div class="stat-value">${s5.passing} / ${s5.raw_scenarios}</div>
-            <div class="stat-sub">${s5.pass_rate_pct.toFixed(1)}% pass rate, 6-check filter</div>
+          <div class="summary-metric">
+            <span class="m-label">Augmented dataset</span>
+            <span class="m-value">${s5.passing} / ${s5.raw_scenarios}</span>
+            <span class="m-sub">${s5.pass_rate_pct.toFixed(1)}% pass rate, 6-check filter</span>
           </div>
-          <div class="stat">
-            <div class="stat-label">Force safety</div>
-            <div class="stat-value ok">100%</div>
-            <div class="stat-sub">Below 6 N crush in every sim trial</div>
+          <div class="summary-metric green">
+            <span class="m-label">Force safety</span>
+            <span class="m-value">100%</span>
+            <span class="m-sub">Below 6 N crush in every sim trial</span>
           </div>
         </div>
         <div class="summary-next">Next: real hardware + more operator demonstrations.</div>
+      </div>
+      <div class="stage-context" style="margin-top:16px">
+        <div class="ctx-item">Recaps the full pipeline: raw EMG in, cleaned and modeled, validated against real force, used to drive simulated action.</div>
+        <div class="ctx-item">States clearly what's proven (the 0.96 force-prediction result) versus what's in development (multimodal capture, real hardware, closed-loop deployment).</div>
+        <div class="ctx-item">Closes with what's next: building the full sensor rig and moving this validated core onto real hardware.</div>
       </div>
     `;
     return sc;
