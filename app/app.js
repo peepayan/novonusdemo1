@@ -934,6 +934,13 @@
           </div>
         </div>
         <div class="summary-next">Next: real hardware + more operator demonstrations.</div>
+        <button class="summary-cta" type="button"
+          data-cal-link="deepayan"
+          data-cal-namespace="deepayan"
+          data-cal-config='{"layout":"month_view"}'>
+          <span class="summary-cta-icon" aria-hidden="true">📞</span>
+          Book a call
+        </button>
       </div>
       <div class="stage-context" style="margin-top:16px">
         <div class="ctx-item">Recaps the full pipeline: raw EMG in, cleaned and modeled, validated against real force, used to drive simulated action.</div>
