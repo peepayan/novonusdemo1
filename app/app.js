@@ -938,7 +938,6 @@
           data-cal-link="deepayan"
           data-cal-namespace="deepayan"
           data-cal-config='{"layout":"month_view"}'>
-          <span class="summary-cta-icon" aria-hidden="true">📞</span>
           Book a call
         </button>
       </div>
